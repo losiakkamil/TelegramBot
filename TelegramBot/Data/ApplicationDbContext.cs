@@ -29,10 +29,10 @@ namespace TelegramBot.Models
 
 
             modelBuilder.Entity<Medal>().HasData(
-                new Medal { Id = 1, ImagePath = "C:\\Users\\tefgo\\source\\repos\\FuhrerMonaruBot\\FuhrerMonaruBot\\images\\braz.jpg", Name = "Bronze" },
-                new Medal { Id = 2, ImagePath = "C:\\Users\\tefgo\\source\\repos\\FuhrerMonaruBot\\FuhrerMonaruBot\\images\\srebro.jpg", Name = "Silver" },
-                new Medal { Id = 3, ImagePath = "C:\\Users\\tefgo\\source\\repos\\FuhrerMonaruBot\\FuhrerMonaruBot\\images\\zloto.jpg", Name = "Gold" },
-                new Medal { Id = 4, ImagePath = "C:\\Users\\tefgo\\source\\repos\\FuhrerMonaruBot\\FuhrerMonaruBot\\images\\karny.jpg", Name = "Warn" }
+                new Medal { Id = 1, ImagePath = "C:\\Users\\tefgo\\source\\repos\\TelegramBot\\TelegramBot\\images\\bronze.jpg", Name = "Bronze" },
+                new Medal { Id = 2, ImagePath = "C:\\Users\\tefgo\\source\\repos\\TelegramBot\\TelegramBot\\images\\silver.jpg", Name = "Silver" },
+                new Medal { Id = 3, ImagePath = "C:\\Users\\tefgo\\source\\repos\\TelegramBot\\TelegramBot\\images\\gold.jpg", Name = "Gold" },
+                new Medal { Id = 4, ImagePath = "C:\\Users\\tefgo\\source\\repos\\TelegramBot\\TelegramBot\\images\\warn.jpg", Name = "Warn" }
                 );
         }
 
