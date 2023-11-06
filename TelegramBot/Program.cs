@@ -98,7 +98,14 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
     {
         await methods.Advertisement(botClient, sentMessage, cancellationToken, message);
     }
-
+    else if (messageText.ToLower().Contains("/setwarn"))
+    {
+        await methods.SetWarn(botClient, sentMessage, cancellationToken, message);
+    }
+    else if (messageText.ToLower().Contains("/deleteonewarn"))
+    {
+        await methods.DeleteOneWarn(botClient, sentMessage, cancellationToken, message);
+    }
     long messageId = message.MessageId;
 
 }

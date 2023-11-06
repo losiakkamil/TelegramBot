@@ -31,7 +31,110 @@ namespace TelegramBot
                 Console.WriteLine($"Nie można usunąć wiadomości: {ex.Message}");
             }
         }
+        public async Task<long> GetUserIdAsync(ITelegramBotClient botClient, string username)
+        {
+            try
+            {
+                var chat = await botClient.GetChatAsync(username);
+                if (chat != null)
+                {
+                    return chat.Id;
+                }
+                else
+                {
+                    return -1; 
+                }
+            }
+            catch (Exception ex)
+            {
+                return -1; 
+            }
+        }
+        public async Task SetWarn(ITelegramBotClient botClient, Message sentMessage, CancellationToken cancellationToken, Message message)
+        {
+            try
+            {
+                if (message.Text.Contains("@"))
+                {
+                    int position = message.Text.IndexOf("@");
+                    string nick = message.Text.Substring(position);
+                    using (ApplicationDbContext context = new ApplicationDbContext())
+                    {
+                        var user = context.Users.FirstOrDefault(u => u.Name == nick);
+                        if (user != null)
+                        {
+                            user.Warn += 1;
+                            if (user.Warn > 2)
+                            {
+                                long userId = await GetUserIdAsync(botClient, user.Name);
+                                await botClient.RestrictChatMemberAsync(
+                                    group,
+                                    userId,
+                                    new ChatPermissions
+                                    {
+                                        CanSendMessages = false,
+                                        CanSendOtherMessages = false,
+                                        CanSendPolls = false,
+                                        CanSendPhotos = false,
+                                        CanManageTopics = false,
+                                        CanChangeInfo = false
+                                    });
+                            }
+                        }
+                    }
+                }
 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            await DeleteMessageTG(botClient, message);
+        }
+
+        public async Task DeleteOneWarn(ITelegramBotClient botClient, Message sentMessage, CancellationToken cancellationToken, Message message)
+        {
+            try
+            {
+                if (message.Text.Contains("@"))
+                {
+                    int position = message.Text.IndexOf("@");
+                    string nick = message.Text.Substring(position);
+                    using (ApplicationDbContext context = new ApplicationDbContext())
+                    {
+                        var user = context.Users.FirstOrDefault(u => u.Name == nick);
+                        if (user != null)
+                        {
+                            if (user.Warn >= 0)
+                            {
+                                user.Warn -= 1;
+                                if (user.Warn < 3)
+                                {
+                                    long userId = await GetUserIdAsync(botClient, user.Name);
+                                    await botClient.RestrictChatMemberAsync(
+                                        group,
+                                        userId,
+                                        new ChatPermissions
+                                        {
+                                            CanSendMessages = true,
+                                            CanSendOtherMessages = true,
+                                            CanSendPolls = true,
+                                            CanSendPhotos = true,
+                                        });
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            await DeleteMessageTG(botClient, message);
+        }
         public async Task GetUsersWithMedals(ITelegramBotClient botClient, Message sentMessage, CancellationToken cancellationToken, Message message)
         {
             try
